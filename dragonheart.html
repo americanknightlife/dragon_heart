@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>The Dragon's Heart – Positivity Hatchery</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- 1. Include A-Frame and AR.js -->
+<script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+<script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+<style>
+:root {
+    --egg-primary: #64748b;
+    --egg-glow: rgba(100, 116, 139, .4);
+    --gold: #fbbf24;
+    --magic-blue: #38bdf8;
+    --deep-bg: #0f172a;
+    --glass: rgba(30, 41, 59, 0.7);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Garamond', serif; /* Gives a more "legendary" feel */
+    background: var(--deep-bg);
+    color: #f1f5f9;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+}
+
+/* Background Nebula Effect */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: radial-gradient(circle at 50% 50%, #1e293b 0%, #0f172a 100%);
+    z-index: -1;
+}
+
+#game-container {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+}
+
+/* ---------- SIDEBAR (THE CHRONICLE) ---------- */
+#sidebar {
+    width: 380px;
+    background: var(--glass);
+    backdrop-filter: blur(12px);
+    border-right: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+    box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+}
+
+.section-title {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    color: var(--magic-blue);
+    margin-bottom: 15px;
+    border-bottom: 1px solid rgba(56, 189, 248, 0.2);
+    padding-bottom: 5px;
+}
+
+#story-box {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.vault-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
+
+.action-btn {
+    padding: 12px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    font-family: inherit;
+    font-size: 0.8rem;
+}
+
+.export-btn { background: #0369a1; color: white; }
+.export-btn:hover { background: #0ea5e9; box-shadow: 0 0 15px var(--magic-blue); }
+
+.marker-link {
+    display: block;
+    text-align: center;
+    color: var(--gold);
+    text-decoration: none;
+    font-size: 0.85rem;
+    margin-top: 10px;
+    border: 1px dashed var(--gold);
+    padding: 8px;
+    border-radius: 6px;
+}
+
+#memory-logs-container {
+    flex: 1;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    padding: 15px;
+    overflow-y: auto;
+    font-family: 'Courier New', monospace;
+}
+
+.diary-item {
+    border-left: 2px solid var(--magic-blue);
+    padding-left: 10px;
+    margin-bottom: 15px;
+    animation: fadeIn 0.5s ease;
+}
+
+/* ---------- MAIN HATCHERY ---------- */
+#hatchery-space {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#stats-header {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+}
+
+.stat-card {
+    background: var(--glass);
+    padding: 15px;
+    border-radius: 12px;
+    flex: 1;
+    text-align: center;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.stat-value { font-size: 1.4rem; font-weight: bold; color: var(--gold); display: block; }
+
+/* ---------- THE EGG ---------- */
+#egg-interaction-zone {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+}
+
+.egg-svg {
+    width: 220px;
+    filter: drop-shadow(0 0 30px var(--egg-glow));
+    transition: transform 0.3s;
+    cursor: pointer;
+}
+
+.egg-svg:active { transform: scale(0.95); }
+
+/* Heartbeat animation */
+.pulse { animation: heartbeat 2s infinite ease-in-out; }
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* ---------- INPUT AREA ---------- */
+#input-panel {
+    width: 100%;
+    max-width: 600px;
+    background: var(--glass);
+    padding: 25px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+#thoughtInput {
+    width: 100%;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid #334155;
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.ar-btn-main {
+    background: linear-gradient(45deg, #7c3aed, #db2777);
+    color: white;
+    border: none;
+    font-size: 1rem;
+    width: 100%;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+/* AR View */
+#ar-view-container { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1000; }
+.exit-ar { position: absolute; top: 20px; right: 20px; z-index: 1100; background: #ef4444; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+
+/* Mobile Adaptations */
+@media (max-width: 900px) {
+    body { overflow-y: auto; }
+    #game-container { flex-direction: column; height: auto; }
+    #sidebar { width: 100%; height: auto; order: 2; }
+    #hatchery-space { order: 1; padding: 20px; }
+}
+
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.shake { animation: shake 0.5s; }
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
+</style>
+</head>
+<body>
+
+<div id="game-container">
+    <!-- ---------- SIDEBAR: THE CHRONICLE ---------- -->
+    <aside id="sidebar">
+        <h2 class="section-title">The Legend</h2>
+        <div id="story-box">
+            "Before the stars grew cold, dragons bonded with the souls of the Kind. Your egg is a 'Heart-Stone'. It does not hatch with heat, but with the warmth of a sincere thought. Whisper hope to it, and watch the scales of destiny shimmer."
+        </div>
+
+        <h2 class="section-title">The Archive</h2>
+        <div class="vault-actions">
+            <button class="action-btn export-btn" id="exportBtn">Save Memory</button>
+            <button class="action-btn" style="background:#334155; color:white;" onclick="document.getElementById('importFile').click()">Load Memory</button>
+            <input type="file" id="importFile" accept=".json" style="display:none">
+        </div>
+
+        <a href="https://raw.githubusercontent.com/americanknightlife/dragon_heart/main/hiro_marker.png" target="_blank" class="marker-link">
+            📜 Download Hiro Marker (Required for AR)
+        </a>
+
+        <h2 class="section-title" style="margin-top:20px;">Memory Lane</h2>
+        <div id="memory-logs-container">
+            <p style="font-size:0.8rem; color:#64748b; text-align:center;">The stone is silent...</p>
+        </div>
+    </aside>
+
+    <!-- ---------- MAIN AREA: THE HATCHERY ---------- -->
+    <main id="hatchery-space">
+        <div id="stats-header">
+            <div class="stat-card"><span class="stat-label">VITALITY</span><span class="stat-value" id="healthVal">100%</span></div>
+            <div class="stat-card"><span class="stat-label">RESONANCE</span><span class="stat-value" id="energyVal">0%</span></div>
+            <div class="stat-card"><span class="stat-label">ESSENCE</span><span class="stat-value" id="stageVal">Stone</span></div>
+        </div>
+
+        <div id="egg-interaction-zone">
+            <svg id="eggSVG" class="egg-svg pulse" viewBox="0 0 200 260">
+                <defs>
+                    <radialGradient id="eggGrad" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" style="stop-color:rgba(255,255,255,0.2)" />
+                        <stop offset="100%" style="stop-color:rgba(0,0,0,0)" />
+                    </radialGradient>
+                </defs>
+                <ellipse class="egg-base-shape" cx="100" cy="130" rx="90" ry="120" fill="#64748b" />
+                <ellipse cx="100" cy="130" rx="90" ry="120" fill="url(#eggGrad)" />
+                <!-- Crack Paths -->
+                <path id="crack1" d="M60 60 L100 100" stroke="#ff7a00" stroke-width="4" fill="none" opacity="0"/>
+                <path id="crack2" d="M140 80 L100 140" stroke="#ff7a00" stroke-width="4" fill="none" opacity="0"/>
+                <!-- Eyes (Hidden) -->
+                <g id="dragonEyes" opacity="0">
+                    <circle cx="80" cy="120" r="8" fill="white"/><circle cx="80" cy="120" r="3" fill="black"/>
+                    <circle cx="120" cy="120" r="8" fill="white"/><circle cx="120" cy="120" r="3" fill="black"/>
+                </g>
+            </svg>
+        </div>
+
+        <div id="input-panel">
+            <input type="text" id="thoughtInput" placeholder="Whisper a positive thought to the egg...">
+            <button class="action-btn" id="sendThoughtBtn" style="width:100%; background:var(--magic-blue); color:white; border:none; height:50px; font-size:1rem;">Channel Positivity</button>
+            <button id="arToggleBtn" class="action-btn ar-btn-main">✨ Summon into AR</button>
+        </div>
+    </main>
+</div>
+
+<!-- ---------- AR VIEW ---------- -->
+<div id="ar-view-container">
+    <button class="exit-ar" id="closeArBtn">Close Portal (Exit AR)</button>
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
+        <a-marker preset="hiro">
+            <a-sphere id="ar-egg" position="0 0.5 0" radius="0.6" material="color: #64748b; opacity: 0.8; transparent: true;"></a-sphere>
+            <a-entity id="ar-dragon" position="0 0.5 0" scale="0.4 0.4 0.4" visible="false">
+                <a-sphere color="#ff7a00" radius="0.7"></a-sphere>
+                <a-cone color="#ff7a00" position="0 0.8 0" radius-bottom="0.4" height="0.6"></a-cone>
+            </a-entity>
+        </a-marker>
+        <a-entity camera></a-entity>
+    </a-scene>
+</div>
+
+<script>
+const state = { health: 100, positivity: 0, stage: 'Stone', logs: [] };
+
+function interpolateColor(p) {
+    const r = Math.round(100 + (255 - 100) * p);
+    const g = Math.round(116 + (191 - 116) * p);
+    const b = Math.round(139 + (0 - 139) * p);
+    return `rgb(${r},${g},${b})`;
+}
+
+function updateUI() {
+    document.getElementById('healthVal').textContent = state.health + '%';
+    document.getElementById('energyVal').textContent = state.positivity + '%';
+    document.getElementById('stageVal').textContent = state.stage;
+    
+    const color = interpolateColor(state.positivity / 100);
+    document.querySelector('.egg-base-shape').setAttribute('fill', color);
+    
+    // Stages Visuals
+    if(state.positivity > 40) document.getElementById('crack1').style.opacity = "1";
+    if(state.positivity > 70) document.getElementById('crack2').style.opacity = "1";
+    if(state.positivity >= 100) {
+        document.getElementById('dragonEyes').style.opacity = "1";
+        document.querySelector('.egg-base-shape').style.opacity = "0.4";
+        state.stage = "Awakened";
+    }
+
+    // Update AR
+    const arEgg = document.getElementById('ar-egg');
+    if(arEgg) arEgg.setAttribute('color', color);
+    if(state.stage === 'Awakened') {
+        document.getElementById('ar-dragon').setAttribute('visible', 'true');
+        arEgg.setAttribute('material', 'wireframe', 'true');
+    }
+}
+
+function addLog(msg) {
+    state.logs.unshift({ time: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), text: msg });
+    const container = document.getElementById('memory-logs-container');
+    container.innerHTML = state.logs.map(l => `
+        <div class="diary-item"><strong>${l.time}</strong><br>${l.text}</div>
+    `).join('');
+}
+
+document.getElementById('sendThoughtBtn').addEventListener('click', () => {
+    const input = document.getElementById('thoughtInput');
+    if(!input.value.trim()) return;
+
+    // Visual Juice: Shake the egg
+    const egg = document.getElementById('eggSVG');
+    egg.classList.add('shake');
+    setTimeout(() => egg.classList.remove('shake'), 500);
+
+    state.positivity = Math.min(100, state.positivity + 10);
+    if(state.positivity > 30) state.stage = 'Vibrating';
+    if(state.positivity > 60) state.stage = 'Cracking';
+    
+    addLog(`Resonated: "${input.value}"`);
+    input.value = '';
+    updateUI();
+});
+
+// AR Toggles
+document.getElementById('arToggleBtn').addEventListener('click', () => {
+    document.getElementById('game-container').style.display = 'none';
+    document.getElementById('ar-view-container').style.display = 'block';
+    window.dispatchEvent(new Event('resize'));
+});
+
+document.getElementById('closeArBtn').addEventListener('click', () => {
+    document.getElementById('ar-view-container').style.display = 'none';
+    document.getElementById('game-container').style.display = 'flex';
+});
+
+// Persistence
+document.getElementById('exportBtn').addEventListener('click', () => {
+    const blob = new Blob([JSON.stringify(state)], {type: 'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'dragon_soul.json';
+    a.click();
+});
+
+document.getElementById('importFile').addEventListener('change', (e) => {
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        Object.assign(state, JSON.parse(ev.target.result));
+        updateUI();
+        addLog("Ancestral memories restored.");
+    };
+    reader.readAsText(e.target.files[0]);
+});
+
+updateUI();
+</script>
+</body>
+</html>
