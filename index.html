@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>The Dragon's Heart – The 90-Day Vigil</title>
+    <title>The Dragon's Heart – Official Portal</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root {
@@ -10,273 +10,220 @@
             --card: #1e293b;
             --gold: #fbbf24;
             --blue: #38bdf8;
-            --danger: #ef4444;
+            --accent: #8b5cf6;
+            --success: #10b981;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             background: var(--bg);
             color: #f1f5f9;
             margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+            line-height: 1.6;
         }
 
-        #game-wrapper {
-            width: 95%;
-            max-width: 500px;
-            background: var(--card);
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* --- KID'S STORY HEADER --- */
+        .story-header {
+            background: linear-gradient(135deg, #1e293b 0%, #312e81 100%);
+            padding: 45px;
+            border-radius: 30px;
             text-align: center;
+            border: 2px solid var(--blue);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            margin-bottom: 40px;
         }
 
-        .stats-grid {
+        .story-header h1 {
+            color: var(--gold);
+            font-size: 2.8rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+        }
+
+        .story-text {
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #cbd5e1;
+        }
+
+        /* --- STAGE NAVIGATION --- */
+        .stage-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 25px;
+            margin-bottom: 40px;
         }
 
-        .stat-box {
-            background: rgba(0,0,0,0.2);
-            padding: 15px;
-            border-radius: 12px;
+        .stage-card {
+            background: var(--card);
+            padding: 30px;
+            border-radius: 20px;
+            text-decoration: none;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--blue);
+            background: rgba(56, 189, 248, 0.05);
+            box-shadow: 0 10px 25px rgba(56, 189, 248, 0.1);
+        }
+
+        .stage-card h3 { color: var(--blue); font-size: 1.4rem; margin-top: 0; }
+        .stage-card p { font-size: 0.95rem; color: #94a3b8; }
+
+        /* --- INFO SECTIONS --- */
+        .info-section {
+            background: var(--card);
+            padding: 35px;
+            border-radius: 24px;
+            margin-bottom: 30px;
             border: 1px solid rgba(255,255,255,0.05);
         }
 
-        .stat-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 1px; }
-        .stat-value { font-size: 1.2rem; font-weight: bold; display: block; margin-top: 5px; }
-
-        /* Egg Visualization */
-        #egg-container {
-            margin: 40px 0;
-            position: relative;
-        }
-
-        .egg-svg {
-            width: 180px;
-            filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.2));
-            transition: all 0.5s ease;
-        }
-
-        .pulse { animation: pulse 3s infinite ease-in-out; }
-        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-
-        /* Input Styles */
-        #thoughtInput {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            border: 1px solid #334155;
-            background: #0f172a;
-            color: white;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-        }
-
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border-radius: 12px;
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        .btn-primary { background: var(--blue); color: white; }
-        .btn-save { background: transparent; color: var(--blue); border: 1px solid var(--blue); margin-top: 20px;}
+        h2 { color: var(--gold); border-bottom: 2px solid #334155; padding-bottom: 10px; margin-top: 0; }
+        h3 { color: var(--blue); margin-top: 25px; }
         
-        .hatch-btn { 
-            background: linear-gradient(to right, #f59e0b, #ef4444); 
-            color: white; font-size: 1.2rem; animation: glow 2s infinite;
+        .guide-box {
+            background: rgba(139, 92, 246, 0.1);
+            border-left: 4px solid var(--accent);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 15px 15px 0;
         }
 
-        @keyframes glow { 0%, 100% { box-shadow: 0 0 5px var(--gold); } 50% { box-shadow: 0 0 20px var(--gold); } }
+        .download-box {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid var(--success);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 20px 0;
+        }
 
-        .hidden { display: none; }
-        .warning { color: var(--danger); font-size: 0.8rem; margin-top: 10px; }
+        .step-list {
+            padding-left: 0;
+            list-style: none;
+        }
+
+        .step-list li {
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 15px;
+        }
+
+        .step-list li::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 25px;
+            height: 25px;
+            background: var(--blue);
+            color: var(--bg);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .offline-badge {
+            background: var(--success);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            font-weight: bold;
+            float: right;
+        }
+
+        code {
+            background: #0f172a;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: var(--gold);
+        }
+
+        @media (max-width: 600px) {
+            .stage-grid { grid-template-columns: 1fr; }
+            .offline-badge { float: none; display: inline-block; margin-bottom: 10px; }
+        }
     </style>
 </head>
 <body>
 
-<div id="game-wrapper">
-    <h2 id="story-title">The 90-Day Vigil</h2>
-    <p style="font-size: 0.9rem; color: #94a3b8; margin-bottom: 20px;">The dragon will hatch when the time is right, provided it is loved.</p>
+<div class="container">
+    <!-- KID'S STORY SECTION -->
+    <header class="story-header">
+        <h1>The Legend of the Heart-Stone</h1>
+        <p class="story-text">
+            "Long ago, dragons learned that fire can burn, but kindness can build. They created the Heart-Stone eggs—magical gems that only hatch for those who practice the 'Daily Whisper.' To hatch your dragon, you must be a beacon of positivity. To raise your dragon, you must be a wise teacher. Your journey begins with a single hopeful thought."
+        </p>
+    </header>
 
-    <div class="stats-grid">
-        <div class="stat-box">
-            <span class="stat-label">Egg Health</span>
-            <span class="stat-value" id="healthVal">100%</span>
-        </div>
-        <div class="stat-box">
-            <span class="stat-label">Days Remaining</span>
-            <span class="stat-value" id="daysVal">90</span>
-        </div>
-        <div class="stat-box">
-            <span class="stat-label">Weekly Whispers</span>
-            <span class="stat-value" id="weeklyVal">0 / 7</span>
-        </div>
-        <div class="stat-box">
-            <span class="stat-label">Total Love</span>
-            <span class="stat-value" id="loveVal">0</span>
-        </div>
+    <!-- STAGE NAVIGATION -->
+    <div class="stage-grid">
+        <a href="dragonheart.html" class="stage-card">
+            <h3>Stage 1: The Egg</h3>
+            <p><strong>The 90-Day Vigil</strong><br>Keep the egg healthy with weekly positivity until it resonates and shatters.</p>
+        </a>
+        <a href="baby_dragon.html" class="stage-card">
+            <h3>Stage 2: The Baby</h3>
+            <p><strong>The 9-Month Mentorship</strong><br>Name your dragon and teach them the lessons you learn in your own life.</p>
+        </a>
     </div>
 
-    <div id="egg-container">
-        <svg class="egg-svg pulse" viewBox="0 0 200 260">
-            <ellipse id="eggShape" cx="100" cy="130" rx="90" ry="120" fill="#475569" />
-        </svg>
-    </div>
+    <!-- PARENTAL GUIDE -->
+    <section class="info-section">
+        <h2>Parent & Educator Guide</h2>
+        <div class="guide-box">
+            <strong>Educational Philosophy:</strong> This project uses "The Feynman Technique" (teaching a concept to others to master it) and habit-tracking to build emotional intelligence.
+        </div>
+        <ul>
+            <li><strong>Consistency Over Intensity:</strong> The 90-day egg stage is designed to make positivity a habit. It requires very little time each day, but high consistency.</li>
+            <li><strong>Reflective Learning:</strong> In the Baby stage, when the child "teaches" the dragon what they learned in school, they are performing metacognition—thinking about their own learning.</li>
+            <li><strong>Data Ownership:</strong> This game is "Serverless." No data is ever sent to the cloud. Your child's thoughts remain on their device.</li>
+        </ul>
+    </section>
 
-    <!-- HATCH BUTTON (Hidden until 90 days pass) -->
-    <button id="hatchBtn" class="btn hatch-btn hidden" onclick="location.href='baby_dragon.html'">✨ THE EGG IS HATCHING! ENTER ✨</button>
+    <!-- LOCAL PLAY / DOWNLOAD SECTION -->
+    <section class="info-section">
+        <span class="offline-badge">Play Anywhere</span>
+        <h2>Play Offline & Local</h2>
+        <p>You don't need to be online to raise your dragon! You can download the entire game and keep it on a computer, a tablet, or even a USB drive.</p>
+        
+        <div class="download-box">
+            <h3>How to Download & Play Locally:</h3>
+            <ul class="step-list">
+                <li data-step="1">Go to the repository: <a href="https://github.com/americanknightlife/dragon_heart" style="color:var(--blue); font-weight:bold;">GitHub Project Link</a></li>
+                <li data-step="2">Find the green button that says <strong>"Code"</strong> (near the top right).</li>
+                <li data-step="3">Click <strong>"Download ZIP"</strong> from the menu.</li>
+                <li data-step="4">Find the file in your computer's "Downloads" folder and <strong>Extract</strong> (unzip) it.</li>
+                <li data-step="5">Double-click <code>index.html</code>. The game will open in your web browser, but it is running entirely from your own files!</li>
+            </ul>
+        </div>
 
-    <div id="input-ui">
-        <input type="text" id="thoughtInput" placeholder="Whisper something positive...">
-        <button class="btn btn-primary" onclick="feedEgg()">Channel Positivity</button>
-        <p id="weeklyWarning" class="warning hidden">Goal met for this week! Keep going or rest.</p>
-    </div>
-
-    <button class="btn btn-save" onclick="exportSoul()">Save Dragon Soul (.json)</button>
-    <input type="file" id="importFile" class="hidden" onchange="importSoul(event)">
-    <p style="font-size: 0.7rem; color: #64748b; cursor: pointer; margin-top: 10px;" onclick="document.getElementById('importFile').click()">Load Existing Soul</p>
+        <h3>Important: The "Dragon Soul" File</h3>
+        <p>When playing locally, browsers might sometimes clear their "Local Storage" memory. To make sure you never lose your dragon:</p>
+        <ul>
+            <li>Click <strong>"Save Soul"</strong> inside the game frequently. This downloads a <code>.json</code> file.</li>
+            <li>If you move to a new computer or the game looks empty, click <strong>"Load Soul"</strong> and select your latest file.</li>
+            <li>Think of this file as your dragon's <strong>Spirit and Memory</strong>. Keep it safe!</li>
+        </ul>
+    </section>
 </div>
 
-<script>
-    // Configuration
-    const GOAL_PER_WEEK = 7;
-    const DAYS_TO_HATCH = 90;
-    const MS_IN_DAY = 86400000;
-    const MS_IN_WEEK = MS_IN_DAY * 7;
-
-    // Game State
-    let soul = {
-        createdDate: Date.now(),
-        lastCheckIn: Date.now(),
-        health: 100,
-        totalLove: 0,
-        weeklyCount: 0
-    };
-
-    function init() {
-        // Load from LocalStorage if it exists
-        const saved = localStorage.getItem('dragon_soul');
-        if (saved) {
-            soul = JSON.parse(saved);
-        }
-        checkTimePassage();
-        updateUI();
-    }
-
-    function checkTimePassage() {
-        const now = Date.now();
-        const timeDiff = now - soul.lastCheckIn;
-
-        // If more than a week has passed since the last count reset
-        if (timeDiff >= MS_IN_WEEK) {
-            const weeksPassed = Math.floor(timeDiff / MS_IN_WEEK);
-            
-            for(let i = 0; i < weeksPassed; i++) {
-                if (soul.weeklyCount < GOAL_PER_WEEK) {
-                    soul.health = Math.max(0, soul.health - 20); // Penalty for missing a week
-                }
-                soul.weeklyCount = 0; // Reset count for the new week
-            }
-            soul.lastCheckIn = now;
-            save();
-        }
-    }
-
-    function feedEgg() {
-        const input = document.getElementById('thoughtInput');
-        if (!input.value.trim()) return;
-
-        soul.totalLove++;
-        soul.weeklyCount++;
-        input.value = '';
-        
-        save();
-        updateUI();
-
-        // Small visual feedback
-        const egg = document.getElementById('eggShape');
-        egg.style.fill = "#38bdf8";
-        setTimeout(() => updateUI(), 500);
-    }
-
-    function updateUI() {
-        const now = Date.now();
-        const ageInMs = now - soul.createdDate;
-        const daysPassed = Math.floor(ageInMs / MS_IN_DAY);
-        const daysLeft = Math.max(0, DAYS_TO_HATCH - daysPassed);
-
-        document.getElementById('healthVal').textContent = soul.health + "%";
-        document.getElementById('daysVal').textContent = daysLeft;
-        document.getElementById('weeklyVal').textContent = `${soul.weeklyCount} / ${GOAL_PER_WEEK}`;
-        document.getElementById('loveVal').textContent = soul.totalLove;
-
-        // Color the egg based on health/love
-        const eggShape = document.getElementById('eggShape');
-        if (soul.health < 50) eggShape.setAttribute('fill', '#991b1b');
-        else eggShape.setAttribute('fill', interpolateColor(soul.totalLove / 100));
-
-        // Weekly Warning
-        const warning = document.getElementById('weeklyWarning');
-        if (soul.weeklyCount >= GOAL_PER_WEEK) warning.classList.remove('hidden');
-        else warning.classList.add('hidden');
-
-        // Hatching Condition
-        if (daysLeft === 0 && soul.health > 0) {
-            document.getElementById('input-ui').classList.add('hidden');
-            document.getElementById('hatchBtn').classList.remove('hidden');
-            document.getElementById('story-title').textContent = "The Time is Now";
-        }
-        
-        if (soul.health <= 0) {
-            document.getElementById('story-title').textContent = "The Soul has Faded";
-            document.getElementById('input-ui').classList.add('hidden');
-        }
-    }
-
-    function interpolateColor(p) {
-        // Shifts from slate-grey to magical-blue
-        const r = Math.round(71 + (56 - 71) * Math.min(p, 1));
-        const g = Math.round(85 + (189 - 85) * Math.min(p, 1));
-        const b = Math.round(105 + (248 - 105) * Math.min(p, 1));
-        return `rgb(${r},${g},${b})`;
-    }
-
-    function save() {
-        localStorage.setItem('dragon_soul', JSON.stringify(soul));
-    }
-
-    function exportSoul() {
-        const data = JSON.stringify(soul, null, 2);
-        const blob = new Blob([data], {type: 'application/json'});
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `dragon_soul_${new Date().toISOString().slice(0,10)}.json`;
-        a.click();
-    }
-
-    function importSoul(event) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            soul = JSON.parse(e.target.result);
-            save();
-            updateUI();
-            alert("Dragon Soul Bound Successfully.");
-        };
-        reader.readAsText(event.target.files[0]);
-    }
-
-    init();
-</script>
 </body>
 </html>
