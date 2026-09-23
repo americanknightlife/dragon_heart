@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Dragon's Heart – The Young Mentor</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --bg: #0b0f19;
+            --card: #1e293b;
+            --gold: #fbbf24;
+            --blue: #38bdf8;
+            --green: #10b981;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: #f1f5f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Fixed Image at Top */
+        #dragon-header {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            background: var(--bg);
+            padding-bottom: 15px;
+            z-index: 100;
+        }
+
+        .dragon-img {
+            width: 100%;
+            max-width: 400px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3);
+            border: 2px solid var(--blue);
+        }
+
+        #main-ui {
+            width: 95%;
+            max-width: 500px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            padding: 20px;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .stats-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .stat-box {
+            background: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-label { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; }
+        .stat-val { font-size: 1rem; font-weight: bold; display: block; color: var(--gold); }
+
+        /* Naming Overlay */
+        #naming-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        input[type="text"], textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            background: #0f172a;
+            color: white;
+            margin-top: 10px;
+            box-sizing: border-box;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            background: var(--blue);
+            color: white;
+            margin-top: 10px;
+        }
+
+        .question-box {
+            border: 1px solid var(--gold);
+            padding: 15px;
+            border-radius: 12px;
+            background: rgba(251, 191, 36, 0.05);
+        }
+
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<!-- NAMING SCREEN -->
+<div id="naming-overlay" class="hidden">
+    <h1>A New Life Begins</h1>
+    <p>The egg has shattered, and a young dragon looks at you with curiosity. What will you name them?</p>
+    <input type="text" id="nameInput" placeholder="Enter name...">
+    <button class="btn" onclick="nameDragon()">Bind Name</button>
+</div>
+
+<!-- TOP IMAGE -->
+<div id="dragon-header">
+    <img src="babydragon.jpeg" alt="Baby Dragon" class="dragon-img">
+    <h2 id="displayName" style="margin-top:10px; color:var(--gold);">Dragon</h2>
+</div>
+
+<div id="main-ui">
+    <!-- STATS -->
+    <div class="card stats-row">
+        <div class="stat-box">
+            <span class="stat-label">Mentorship Age</span>
+            <span class="stat-val" id="ageVal">0 Months</span>
+        </div>
+        <div class="stat-box">
+            <span class="stat-label">Lessons Shared</span>
+            <span class="stat-val" id="lessonsVal">0</span>
+        </div>
+    </div>
+
+    <!-- WEEKLY QUESTION SECTION -->
+    <div id="weekly-section" class="card hidden">
+        <h3 style="color:var(--gold); margin-top:0;">Dragon's Question</h3>
+        <div class="question-box">
+            <p id="questionText">Loading question...</p>
+            <textarea id="answerInput" rows="3" placeholder="Share your wisdom..."></textarea>
+            <button class="btn" style="background:var(--green)" onclick="submitAdvice()">Give Advice</button>
+        </div>
+    </div>
+
+    <!-- DAILY LEARNING SECTION -->
+    <div class="card">
+        <h3 style="margin-top:0;">Daily Lesson</h3>
+        <p style="font-size: 0.85rem; color:#94a3b8;">Teach your dragon something you learned today (at school, work, or life).</p>
+        <textarea id="lessonInput" rows="2" placeholder="Today I learned that..."></textarea>
+        <button class="btn" onclick="submitLesson()">Share Lesson</button>
+    </div>
+
+    <button class="btn" style="background:transparent; border:1px solid var(--blue); color:var(--blue);" onclick="exportSoul()">Save Soul Progress</button>
+</div>
+
+<script>
+    const NINE_MONTHS_MS = 270 * 24 * 60 * 60 * 1000;
+    const WEEK_MS = 7 * 24 * 60 * 60 * 1000;
+
+    let soul = JSON.parse(localStorage.getItem('dragon_soul')) || {};
+    let questionsPool = [];
+
+    async function init() {
+        // Setup initial soul if missing baby stage data
+        if (!soul.babyStageStarted) {
+            soul.babyStageStarted = Date.now();
+            soul.lessonsCount = 0;
+            soul.answeredQuestionIds = [];
+            soul.lastQuestionDate = 0;
+            soul.dragonName = "";
+        }
+
+        if (!soul.dragonName) {
+            document.getElementById('naming-overlay').classList.remove('hidden');
+        } else {
+            document.getElementById('displayName').textContent = soul.dragonName;
+        }
+
+        // Load Questions
+        try {
+            const response = await fetch('questions.json');
+            questionsPool = await response.json();
+            checkWeeklyQuestion();
+        } catch (e) {
+            console.error("Could not load questions.json", e);
+        }
+
+        updateUI();
+    }
+
+    function nameDragon() {
+        const name = document.getElementById('nameInput').value.trim();
+        if (!name) return;
+        soul.dragonName = name;
+        document.getElementById('displayName').textContent = name;
+        document.getElementById('naming-overlay').classList.add('hidden');
+        save();
+    }
+
+    function checkWeeklyQuestion() {
+        const now = Date.now();
+        // If it's been a week since last advice AND we haven't asked all 40
+        if (now - soul.lastQuestionDate >= WEEK_MS && soul.answeredQuestionIds.length < 40) {
+            
+            // Filter out questions already asked
+            const available = questionsPool.filter(q => !soul.answeredQuestionIds.includes(q.id));
+            if (available.length > 0) {
+                const randomQ = available[Math.floor(Math.random() * available.length)];
+                document.getElementById('questionText').textContent = randomQ.text;
+                document.getElementById('questionText').dataset.qid = randomQ.id;
+                document.getElementById('weekly-section').classList.remove('hidden');
+            }
+        }
+    }
+
+    function submitAdvice() {
+        const ans = document.getElementById('answerInput').value.trim();
+        const qid = parseInt(document.getElementById('questionText').dataset.qid);
+        if (!ans) return;
+
+        soul.answeredQuestionIds.push(qid);
+        soul.lastQuestionDate = Date.now();
+        soul.totalLove += 10; // Positivity boost
+        
+        document.getElementById('weekly-section').classList.add('hidden');
+        document.getElementById('answerInput').value = "";
+        alert(`${soul.dragonName} listens intently to your advice...`);
+        save();
+        updateUI();
+    }
+
+    function submitLesson() {
+        const lesson = document.getElementById('lessonInput').value.trim();
+        if (!lesson) return;
+
+        soul.lessonsCount++;
+        soul.totalLove += 5;
+        document.getElementById('lessonInput').value = "";
+        alert(`Memory recorded. ${soul.dragonName} is learning.`);
+        save();
+        updateUI();
+    }
+
+    function updateUI() {
+        const ageMs = Date.now() - soul.babyStageStarted;
+        const months = Math.floor(ageMs / (30 * 24 * 60 * 60 * 1000));
+        
+        document.getElementById('ageVal').textContent = `${months} / 9 Months`;
+        document.getElementById('lessonsVal').textContent = soul.lessonsCount;
+        
+        if (ageMs >= NINE_MONTHS_MS) {
+            alert("Your dragon is ready for the next stage of growth!");
+            // You can add a link to the "Adult Dragon" stage here later
+        }
+    }
+
+    function save() {
+        localStorage.setItem('dragon_soul', JSON.stringify(soul));
+    }
+
+    function exportSoul() {
+        const data = JSON.stringify(soul, null, 2);
+        const blob = new Blob([data], {type: 'application/json'});
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = `dragon_soul_${soul.dragonName}.json`;
+        a.click();
+    }
+
+    init();
+</script>
+</body>
+</html>

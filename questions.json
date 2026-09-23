@@ -1,0 +1,166 @@
+{
+    "game_title": "Baby Dragon Question Game",
+    "description": "Normal questions a five-year-old child asks that parents and kids can answer together and then teach to the baby dragon.",
+    "questions": [
+        {
+            "number": 1,
+            "question": "Why is the sky blue?"
+        },
+        {
+            "number": 2,
+            "question": "Where do birds sleep at night?"
+        },
+        {
+            "number": 3,
+            "question": "Why do dogs pant when they are hot?"
+        },
+        {
+            "number": 4,
+            "question": "How do fish breathe underwater?"
+        },
+        {
+            "number": 5,
+            "question": "Why do we have to sleep?"
+        },
+        {
+            "number": 6,
+            "question": "Where does the sun go when it gets dark?"
+        },
+        {
+            "number": 7,
+            "question": "Why do leaves change color in the fall?"
+        },
+        {
+            "number": 8,
+            "question": "How do plants drink water?"
+        },
+        {
+            "number": 9,
+            "question": "Why do we get hiccups?"
+        },
+        {
+            "number": 10,
+            "question": "Where do dreams come from?"
+        },
+        {
+            "number": 11,
+            "question": "Why is water wet?"
+        },
+        {
+            "number": 12,
+            "question": "How do birds know how to build nests?"
+        },
+        {
+            "number": 13,
+            "question": "Why do cats purr?"
+        },
+        {
+            "number": 14,
+            "question": "Where does rain come from?"
+        },
+        {
+            "number": 15,
+            "question": "Why do we grow taller?"
+        },
+        {
+            "number": 16,
+            "question": "How do bees make honey?"
+        },
+        {
+            "number": 17,
+            "question": "Why do stars only come out at night?"
+        },
+        {
+            "number": 18,
+            "question": "Where do shadows go when the lights go out?"
+        },
+        {
+            "number": 19,
+            "question": "Why do onions make us cry when we cut them?"
+        },
+        {
+            "number": 20,
+            "question": "How do airplanes stay up in the sky?"
+        },
+        {
+            "number": 21,
+            "question": "Why do we have eyebrows?"
+        },
+        {
+            "number": 22,
+            "question": "Where do echoes come from?"
+        },
+        {
+            "number": 23,
+            "question": "Why do some animals hibernate in the winter?"
+        },
+        {
+            "number": 24,
+            "question": "How do ants talk to each other?"
+        },
+        {
+            "number": 25,
+            "question": "Why do our teeth fall out when we are little?"
+        },
+        {
+            "number": 26,
+            "question": "Where does the wind come from?"
+        },
+        {
+            "number": 27,
+            "question": "Why do clocks go tick-tock?"
+        },
+        {
+            "number": 28,
+            "question": "How do caterpillars turn into butterflies?"
+        },
+        {
+            "number": 29,
+            "question": "Why do we feel ticklish?"
+        },
+        {
+            "number": 30,
+            "question": "Where do rivers flow to?"
+        },
+        {
+            "number": 31,
+            "question": "Why do fireflies glow in the dark?"
+        },
+        {
+            "number": 32,
+            "question": "How do our eyes see colors?"
+        },
+        {
+            "number": 33,
+            "question": "Why do we yawn when we are tired?"
+        },
+        {
+            "number": 34,
+            "question": "Where do clouds get their fluffy shapes?"
+        },
+        {
+            "number": 35,
+            "question": "Why do spiders spin webs?"
+        },
+        {
+            "number": 36,
+            "question": "How do boats float on water?"
+        },
+        {
+            "number": 37,
+            "question": "Why do our fingers get wrinkly in the bathtub?"
+        },
+        {
+            "number": 38,
+            "question": "Where does the moon get its light?"
+        },
+        {
+            "number": 39,
+            "question": "Why do we sneeze?"
+        },
+        {
+            "number": 40,
+            "question": "How do seeds grow into giant trees?"
+        }
+    ]
+}
